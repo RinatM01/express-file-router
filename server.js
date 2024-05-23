@@ -21,7 +21,6 @@ async function handleStaticRoute(fileRoute, req, res) {
         }
         return data;
     } catch (err) {
-        //console.log(err);
         res.statusCode = 404;
         return false
     }
@@ -38,7 +37,6 @@ async function handleDynamicRoute (fileRoute,req,res) {
         });
         const dynamicParam = dynamicFileName.replace("[","").replace("].js","");
         req.params = {...req.params, [dynamicParam] : dynamicArg}
-        console.log(dynamicDir + `/${dynamicFileName}`);
         const data = await handleStaticRoute(dynamicDir + `/${dirs[0]}`,req,res);
         return data;
     } catch (err) {
@@ -54,7 +52,6 @@ app.all("/*", async (req, res) => {
     if (doesExist) {
         data = await handleStaticRoute(fileRoute + "/page.js",req,res);
     } else {
-        console.log(fileRoute);
         data = await handleDynamicRoute(fileRoute,req,res);
     }
     
