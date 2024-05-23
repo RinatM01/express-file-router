@@ -35,13 +35,12 @@ async function handleDynamicRoute (fileRoute,req,res) {
     try {
         const dynamicFileName = dirs.find(name => {
             return name.match(/\[[a-zA-Z0-9\._]+\]/);
-        })
-        console.log(dynamicFileName);
+        });
         const dynamicParam = dynamicFileName.replace("[","").replace("].js","");
         req.params = {...req.params, [dynamicParam] : dynamicArg}
         console.log(dynamicDir + `/${dynamicFileName}`);
         const data = await handleStaticRoute(dynamicDir + `/${dirs[0]}`,req,res);
-        return data
+        return data;
     } catch (err) {
         res.statusCode = 404;
         return false
@@ -51,10 +50,8 @@ async function handleDynamicRoute (fileRoute,req,res) {
 app.all("/*", async (req, res) => {
     const fileRoute = (ROOT + req.url).replace("//","/");
     const doesExist = fs.existsSync(fileRoute);
-    //console.log(doesExist);
     let data = null;
     if (doesExist) {
-        
         data = await handleStaticRoute(fileRoute + "/page.js",req,res);
     } else {
         console.log(fileRoute);
